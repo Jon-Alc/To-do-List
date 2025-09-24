@@ -11,6 +11,7 @@ app = Flask(__name__)
 Scss(app)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
@@ -25,6 +26,11 @@ class MyTask(db.Model):
 
     def __repr__(self) -> str:
         return f"Task {self.id}"
+
+
+
+with app.app_context():
+    db.create_all()
 
 
 
@@ -83,7 +89,4 @@ def edit(id:int):
 
 # Runner and Debugger
 if __name__ in "__main__":
-    with app.app_context():
-        db.create_all()
-
     app.run(debug=True)
